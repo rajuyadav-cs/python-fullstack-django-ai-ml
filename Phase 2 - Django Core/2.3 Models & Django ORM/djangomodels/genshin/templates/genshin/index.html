@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock  %}</title>
+    <link rel="stylesheet" href="{% static 'genshin/css/styles.css' %}">
+    <script src="{% static 'genshin/js/scripts.js' %}"></script>
+</head>
+<body>
+    <div class="page">
+            <div class="navbar">
+            <div class="logo">
+                <img src="{% static 'genshin/images/genshinlogo.png' %}" alt="">
+            </div>
+
+            <div class="search">
+                <form action="#">
+                    <input type="text" id = "searchbar">
+                    <button type = "submit" id = "searchbutton">Search</button>
+                </form>
+            </div>
+
+            <div class="links">
+                <div><a href="">Home</a></div>
+                <div><a href="">About</a></div>
+                <div><a href="">Contact</a></div>
+                <div><a href="">Pages</a></div>
+    
+            </div>
+        </div>
+        <div class="hero">
+            {% block content %}{% endblock  %}
+
+        </div>
+
+        <div class="footer">
+            <p>
+                This is the Footer
+                <br>
+                HOME ABOUT CONTACT 
+            </p>
+        </div>
+    </div>
+</body>
+</html>
