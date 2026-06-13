@@ -1,0 +1,143 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    min-height: 100vh;
+    width: auto;
+}
+
+.page{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: cursive;
+    background-color: cyan;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    box-shadow: 0 1px 4px black;
+}
+
+.logo img{
+    margin-left: 20px;
+    height: 40px;
+    width: auto;
+}
+
+#searchbar{
+    height: 40px;
+    width: 40vw;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px darkcyan;
+    font-family: cursive;
+    padding: 0 10px;
+}
+
+#searchbutton{
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px darkcyan;
+    height: 30px;
+    width: 70px;
+    font-family: cursive;
+}
+
+#searchbutton:hover{
+    display: inline-block;
+    transform: scale(1.1);
+}
+
+.links{
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.links div{
+    margin: 20px;
+    font-family: cursive;
+}
+
+.links div a{
+    font-size: large;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.links div a:hover{
+    display: inline-block;
+    transform: scale(1.1);
+    background-color: wheat;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px black;
+}
+
+.hero{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 80%;
+    margin-top: 30px;
+}
+
+.info{
+    background-color: wheat;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px black;
+    padding: 20px;
+    text-align: center;
+}
+
+.info img{
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.info h2{
+    margin-bottom: 10px;
+}
+
+.info p{
+    margin: 6px 0;
+}
+
+.pagination{
+    margin: 30px 0;
+}
+
+.pagination a{
+    padding: 10px 15px;
+    margin: 10px;
+    background-color: wheat;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px black;
+}
+
+.pagination span{
+    font-size: 18px;
+}
+
+.footer{
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: wheat;
+}
