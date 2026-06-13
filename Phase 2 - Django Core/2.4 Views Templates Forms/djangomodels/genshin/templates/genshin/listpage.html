@@ -1,0 +1,43 @@
+{% extends "genshin/index.html" %}
+
+{% block content %}
+<div class="hero">
+        {% for char in page_obj %}
+            <div class="info">
+
+                {% if char.image %}
+                    <img src="{{ char.image.url }}" alt="{{ char.name }}">
+                {% else %}
+                    <p>No Image</p>
+                {% endif %}
+
+                <h2>{{ char.name }}</h2>
+
+                <p><strong>Element:</strong> {{ char.get_element_display }}</p>
+                <p><strong>Gender:</strong> {{ char.get_gender_display }}</p>
+                <p><strong>Weapon:</strong> {{ char.get_weapon_type_display }}</p>
+                <p><strong>Region:</strong> {{ char.get_region_display }}</p>
+
+            </div>
+        {% empty %}
+            <h2>No Data Found</h2>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+
+    </div>
+
+{% endblock  %}
