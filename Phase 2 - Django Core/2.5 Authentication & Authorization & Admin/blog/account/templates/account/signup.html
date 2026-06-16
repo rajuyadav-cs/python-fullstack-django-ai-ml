@@ -1,0 +1,18 @@
+{% extends "account/home.html" %}
+
+{% block title %}
+SIGNUPPAGE
+{% endblock title %}
+
+{% block content %}
+<h1>SignupPage</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Signup</button>
+</form>
+
+{% endblock content %}
+
