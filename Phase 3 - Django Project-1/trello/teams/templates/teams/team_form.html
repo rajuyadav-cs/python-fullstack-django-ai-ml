@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% block title %}
+Create Team
+{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+
+    <div class="bg-slate-900 text-white p-8 rounded-xl shadow-lg">
+
+        <h1 class="text-3xl font-bold mb-6">
+            Create Team
+        </h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label class="block mb-2">
+                    Team Name
+                </label>
+
+                {{ form.team_name }}
+
+                {{ form.team_name.errors }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2">
+                    Description
+                </label>
+
+                {{ form.description }}
+
+                {{ form.description.errors }}
+            </div>
+
+            <div class="mb-6">
+                <label class="block mb-2">
+                    Members
+                </label>
+
+                {{ form.members }}
+
+                {{ form.members.errors }}
+            </div>
+
+            <button
+                type="submit"
+                class="bg-cyan-600 px-5 py-2 rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 hover:shadow-lg transition"
+            >
+                Create Team
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock content %}

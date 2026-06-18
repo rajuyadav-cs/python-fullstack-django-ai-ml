@@ -1,0 +1,223 @@
+{% load static %}
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% tailwind_css %}
+
+    <title>
+        {% block title %}
+            Homepage
+        {% endblock %}
+    </title>
+</head>
+<body class="bg-cyan-500 min-h-screen">
+
+    <div class="w-full min-h-screen flex flex-col">
+
+        <!-- Navbar -->
+        <nav class="flex justify-between items-center h-20 w-full shadow-lg bg-slate-900 text-slate-200 px-6">
+
+            <div class="logo">
+                <img
+                    class="h-16 w-auto rounded-3xl"
+                    src="{% static 'accounts/images/logo.png' %}"
+                    alt="Logo"
+                >
+            </div>
+
+            <div class="links">
+
+                <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                   href="{% url 'home' %}">
+                    Home
+                </a>
+
+                <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                   href="{% url "team-list" %}">
+                    Teams
+                </a>
+
+                <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                href="{% url 'project-list' %}">
+                    Projects
+                </a>
+
+                <a
+                class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                href="{% url 'task-list' %}">
+                Tasks
+            </a>
+
+                {% if request.user.is_authenticated %}
+
+                    <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                       href="{% url 'dashboard' %}">
+                        Dashboard
+                    </a>
+
+                    <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                       href="{% url 'profile' %}">
+                        Profile
+                    </a>
+
+                    <form action="{% url 'logout' %}" method="post" class="inline-block">
+                        {% csrf_token %}
+                        <button
+                            type="submit"
+                            class="text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition">
+                            Logout
+                        </button>
+                    </form>
+
+                {% else %}
+
+                    <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                       href="{% url 'login' %}">
+                        Login
+                    </a>
+
+                    <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                       href="{% url 'register' %}">
+                        Register
+                    </a>
+
+                {% endif %}
+
+                {% if request.user.is_superuser %}
+                    <a class="inline-block text-white p-2 m-2 hover:text-cyan-500 hover:bg-cyan-200 rounded-lg hover:scale-110 transition"
+                       href="{% url 'admin:index' %}">
+                        Admin
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+
+            {% block content %}
+
+            <section class="min-h-[80vh] flex items-center justify-center">
+
+                <div class="text-center text-white max-w-4xl mx-auto">
+
+                    <p class="text-cyan-100 text-lg mb-4 font-medium">
+                        Team Collaboration & Project Management
+                    </p>
+
+                    <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+                        Manage Teams,
+                        <span class="text-slate-900">Projects</span>
+                        &
+                        <span class="text-slate-900">Tasks</span>
+                        Efficiently
+                    </h1>
+
+                    <p class="text-xl text-white mb-8">
+                        Organize projects, assign tasks, collaborate with teams,
+                        track progress and deliver work faster from one place.
+                    </p>
+
+                    <div class="flex justify-center gap-4">
+
+                        {% if request.user.is_authenticated %}
+
+                            <a href="{% url 'dashboard' %}"
+                               class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
+                                Go To Dashboard
+                            </a>
+
+                        {% else %}
+
+                            <a href="{% url 'register' %}"
+                               class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
+                                Get Started
+                            </a>
+
+                            <a href="{% url 'login' %}"
+                               class="border border-white hover:bg-white hover:text-slate-900 px-8 py-3 rounded-xl font-semibold transition">
+                                Login
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            {% endblock content %}
+
+        </main>
+
+        <!-- Footer -->
+                <footer class="bg-slate-900 text-white">
+
+            <div class="max-w-7xl mx-auto px-8 py-10">
+
+                <div class="grid md:grid-cols-3 gap-8">
+
+                    <!-- Brand -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-cyan-400">
+                            ProjectFlow
+                        </h2>
+
+                        <p class="mt-3 text-slate-300">
+                            A modern team collaboration and project management
+                            platform built with Django & Tailwind CSS.
+                        </p>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">
+                            Quick Links
+                        </h3>
+
+                        <ul class="space-y-2 text-slate-300">
+                            <li><a href="{% url 'home' %}" class="hover:text-cyan-400">Home</a></li>
+                            <li><a href="{% url 'dashboard' %}" class="hover:text-cyan-400">Dashboard</a></li>
+                            <li><a href="{% url 'profile' %}" class="hover:text-cyan-400">Profile</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">
+                            Contact
+                        </h3>
+
+                        <p class="text-slate-300">
+                            rajuyadav242625@gmail.com
+                        </p>
+
+                        <p class="text-slate-300 mt-2">
+                            Built with ❤️ using Django & Tailwind
+                        </p>
+                    </div>
+
+                </div>
+
+                <hr class="my-6 border-slate-700">
+
+                <div class="text-center text-slate-400">
+                    © 2026 ProjectFlow. All Rights Reserved.
+                </div>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+</body>
+</html>

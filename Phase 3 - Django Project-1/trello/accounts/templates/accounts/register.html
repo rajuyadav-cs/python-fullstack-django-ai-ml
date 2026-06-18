@@ -1,0 +1,126 @@
+{% extends "index.html" %}
+
+{% block title %}
+Register
+{% endblock title %}
+
+{% block content %}
+
+<div class="flex justify-center items-center min-h-[80vh]">
+
+    <div class="bg-slate-900 text-white p-10 rounded-2xl shadow-2xl w-full max-w-2xl">
+
+        <h1 class="text-4xl font-bold text-center mb-2">
+            Create Account
+        </h1>
+
+        <p class="text-center text-slate-400 mb-8">
+            Join ProjectFlow and start managing your team
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Username
+                    </label>
+                    {{ form.username }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.username.errors }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Email
+                    </label>
+                    {{ form.email }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.email.errors }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Role
+                    </label>
+                    {{ form.role }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.role.errors }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Phone Number
+                    </label>
+                    {{ form.phone_number }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.phone_number.errors }}
+                    </div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block mb-2 text-sm font-medium">
+                        Profile Image
+                    </label>
+                    {{ form.profile_image }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.profile_image.errors }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Password
+                    </label>
+                    {{ form.password1 }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.password1.errors }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium">
+                        Confirm Password
+                    </label>
+                    {{ form.password2 }}
+                    <div class="text-red-400 text-sm mt-1">
+                        {{ form.password2.errors }}
+                    </div>
+                </div>
+
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="text-red-400 text-sm mt-4">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button
+                type="submit"
+                class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl transition mt-8"
+            >
+                Create Account
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-slate-400">
+                Already have an account?
+            </p>
+
+            <a href="{% url 'login' %}" class="text-cyan-400 hover:text-cyan-300 font-semibold">
+                Login Here
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

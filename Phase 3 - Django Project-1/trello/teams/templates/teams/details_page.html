@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% block title %}
+Team Details
+{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-slate-900 text-white p-8 rounded-xl shadow-lg">
+
+    <h1 class="text-4xl font-bold mb-4">
+        {{ team.team_name }}
+    </h1>
+
+    <p class="mb-4 text-slate-300">
+        {{ team.description|default:"No Description" }}
+    </p>
+
+    <p><strong>Created By:</strong> {{ team.created_by.username }}</p>
+    <p><strong>Total Members:</strong> {{ team.members.count }}</p>
+    <p><strong>Created At:</strong> {{ team.created_at|date:"d M Y" }}</p>
+
+    <hr class="my-6 border-slate-700">
+
+    <h2 class="text-2xl font-bold mb-4">
+        Members
+    </h2>
+
+    {% for member in team.members.all %}
+        <div class="bg-slate-800 p-4 rounded-lg mb-3 border border-slate-700 shadow-md">
+            <p><strong>Username:</strong> {{ member.username }}</p>
+            <p><strong>Email:</strong> {{ member.email|default:"No Email" }}</p>
+            <p><strong>Role:</strong> {{ member.get_role_display }}</p>
+        </div>
+    {% empty %}
+        <p class="text-slate-400">No members added.</p>
+    {% endfor %}
+
+    <div class="mt-6 flex gap-4">
+
+        <a href="{% url 'team-list' %}"
+           class="px-5 py-2 bg-cyan-600 text-white rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 hover:shadow-lg transition">
+            Back
+        </a>
+
+        {% if request.user.is_superuser or request.user.role == "MANAGER" %}
+
+        <a href="{% url 'team-update' team.id %}"
+        class="px-4 py-2 bg-yellow-500 text-white rounded-lg border border-yellow-300 shadow-md hover:bg-yellow-600 hover:shadow-lg transition">
+            Edit
+        </a>
+
+        <a href="{% url 'team-delete' team.id %}"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg border border-red-400 shadow-md hover:bg-red-700 hover:shadow-lg transition">
+            Delete
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock content %}

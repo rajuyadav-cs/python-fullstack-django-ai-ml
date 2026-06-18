@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+
+{% block title %}Task Details{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-slate-900 text-white p-8 rounded-xl shadow-lg">
+
+    <h1 class="text-4xl font-bold mb-4">
+        {{ task.title }}
+    </h1>
+
+    <p class="mb-4 text-slate-300">
+        {{ task.description|default:"No Description" }}
+    </p>
+
+    <p><strong>Project:</strong> {{ task.project.project_name }}</p>
+    <p><strong>Assigned To:</strong> {{ task.assigned_to.username|default:"Not Assigned" }}</p>
+    <p><strong>Created By:</strong> {{ task.created_by.username }}</p>
+    <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+    <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
+    <p><strong>Deadline:</strong> {{ task.deadline|date:"d M Y" }}</p>
+
+    <div class="mt-6 flex gap-4">
+
+        <a href="{% url 'task-list' %}"
+           class="px-5 py-2 bg-cyan-600 text-white rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 transition">
+            Back
+        </a>
+
+        <a href="{% url 'task-update' task.id %}"
+           class="px-5 py-2 bg-yellow-500 text-white rounded-lg border border-yellow-300 shadow-md hover:bg-yellow-600 transition">
+            Edit Task
+        </a>
+
+        {% if request.user.is_superuser or request.user.role == "MANAGER" %}
+            <a href="{% url 'task-delete' task.id %}"
+               class="px-5 py-2 bg-red-600 text-white rounded-lg border border-red-400 shadow-md hover:bg-red-700 transition">
+                Delete Task
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock content %}

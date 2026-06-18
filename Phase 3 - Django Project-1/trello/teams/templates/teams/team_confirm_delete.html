@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+
+{% block title %}
+Delete Team
+{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-xl mx-auto bg-slate-900 text-white p-8 rounded-xl shadow-lg">
+
+    <h1 class="text-3xl font-bold mb-4">
+        Delete Team
+    </h1>
+
+    <p class="mb-6">
+        Are you sure you want to delete
+        <strong>{{ object.team_name }}</strong>?
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="bg-red-600 px-5 py-2 rounded-lg border border-red-400 shadow-md hover:bg-red-700 transition"
+        >
+            Yes, Delete
+        </button>
+
+        <a
+            href="{% url 'team-list' %}"
+            class="ml-3 bg-slate-700 px-5 py-2 rounded-lg border border-slate-500 shadow-md hover:bg-slate-600 transition"
+        >
+            Cancel
+        </a>
+    </form>
+
+</div>
+
+{% endblock content %}

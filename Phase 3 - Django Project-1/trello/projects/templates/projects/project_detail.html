@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+
+{% block title %}Project Details{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-slate-900 text-white p-8 rounded-xl shadow-lg">
+
+    <h1 class="text-4xl font-bold mb-4">
+        {{ project.project_name }}
+    </h1>
+
+    <p class="mb-4 text-slate-300">
+        {{ project.description|default:"No Description" }}
+    </p>
+
+    <p><strong>Team:</strong> {{ project.team.team_name }}</p>
+    <p><strong>Status:</strong> {{ project.get_status_display }}</p>
+    <p><strong>Created By:</strong> {{ project.created_by.username }}</p>
+    <p><strong>Start Date:</strong> {{ project.start_date|date:"d M Y" }}</p>
+    <p><strong>Deadline:</strong> {{ project.deadline|date:"d M Y" }}</p>
+    <p><strong>Created At:</strong> {{ project.created_at|date:"d M Y" }}</p>
+
+    <div class="mt-6 flex gap-4">
+
+        <a href="{% url 'project-list' %}"
+           class="px-5 py-2 bg-cyan-600 text-white rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 transition">
+            Back
+        </a>
+
+        {% if request.user.is_superuser or request.user.role == "MANAGER" %}
+            <a href="{% url 'project-update' project.id %}"
+               class="px-5 py-2 bg-yellow-500 text-white rounded-lg border border-yellow-300 shadow-md hover:bg-yellow-600 transition">
+                Edit Project
+            </a>
+
+            <a href="{% url 'project-delete' project.id %}"
+               class="px-5 py-2 bg-red-600 text-white rounded-lg border border-red-400 shadow-md hover:bg-red-700 transition">
+                Delete Project
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock content %}

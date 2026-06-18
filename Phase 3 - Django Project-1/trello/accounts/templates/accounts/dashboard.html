@@ -1,0 +1,166 @@
+{% extends "index.html" %}
+
+{% block title %}
+Dashboard
+{% endblock title %}
+
+{% block content %}
+
+<div class="min-h-[80vh] text-white">
+
+    <div class="bg-slate-900 rounded-2xl shadow-lg p-6 mb-6 border border-slate-700">
+        <div class="flex items-center gap-6">
+
+            {% if request.user.profile_image %}
+                <div class="h-24 w-24 rounded-full bg-slate-800 border-4 border-cyan-400 overflow-hidden flex items-center justify-center">
+                    <img
+                        src="{{ request.user.profile_image.url }}"
+                        alt="Profile Image"
+                        class="h-full w-full object-contain"
+                    >
+                </div>
+            {% else %}
+                <div class="h-24 w-24 rounded-full bg-cyan-600 flex items-center justify-center text-3xl font-bold">
+                    {{ request.user.username|first|upper }}
+                </div>
+            {% endif %}
+
+            <div>
+                <h1 class="text-4xl font-bold">
+                    Welcome, {{ request.user.username }}
+                </h1>
+
+                <p class="text-cyan-300 mt-2">
+                    Role: {{ request.user.get_role_display }}
+                </p>
+
+                <p class="text-slate-300">
+                    Email: {{ request.user.email|default:"Not added" }}
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+
+        <div class="bg-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700">
+            <h3 class="text-slate-400">Teams</h3>
+            <p class="text-4xl font-bold mt-2">{{ total_teams }}</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700">
+            <h3 class="text-slate-400">Projects</h3>
+            <p class="text-4xl font-bold mt-2">{{ total_projects }}</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700">
+            <h3 class="text-slate-400">Tasks</h3>
+            <p class="text-4xl font-bold mt-2">{{ total_tasks }}</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700">
+            <h3 class="text-slate-400">Completed</h3>
+            <p class="text-4xl font-bold mt-2">{{ completed_tasks }}</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700">
+            <h3 class="text-slate-400">My Tasks</h3>
+            <p class="text-4xl font-bold mt-2">{{ my_tasks }}</p>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-2 bg-slate-900 rounded-2xl shadow-lg p-6 border border-slate-700">
+            <h2 class="text-2xl font-bold mb-4">
+                Recent Tasks
+            </h2>
+
+            <div class="space-y-4">
+
+                {% for task in recent_tasks %}
+
+                    <div class="bg-slate-800 rounded-xl p-4 flex justify-between items-center border border-slate-700">
+                        <div>
+                            <h3 class="font-semibold">
+                                {{ task.title }}
+                            </h3>
+
+                            <p class="text-slate-400 text-sm">
+                                {{ task.project.project_name }} • Assigned to:
+                                {{ task.assigned_to.username|default:"Not Assigned" }}
+                            </p>
+                        </div>
+
+                        <span class="bg-cyan-600 px-3 py-1 rounded-full text-sm">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+
+                {% empty %}
+
+                    <div class="bg-slate-800 rounded-xl p-4 flex justify-between items-center border border-slate-700">
+                        <div>
+                            <h3 class="font-semibold">No tasks yet</h3>
+                            <p class="text-slate-400 text-sm">
+                                Tasks will appear here after creating projects.
+                            </p>
+                        </div>
+
+                        <span class="bg-cyan-600 px-3 py-1 rounded-full text-sm">
+                            Empty
+                        </span>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl shadow-lg p-6 border border-slate-700">
+            <h2 class="text-2xl font-bold mb-4">
+                Profile Summary
+            </h2>
+
+            <div class="space-y-3 text-slate-300">
+
+                <p>
+                    <span class="text-slate-500">Username:</span>
+                    {{ request.user.username }}
+                </p>
+
+                <p>
+                    <span class="text-slate-500">Role:</span>
+                    {{ request.user.get_role_display }}
+                </p>
+
+                <p>
+                    <span class="text-slate-500">Email:</span>
+                    {{ request.user.email|default:"Not added" }}
+                </p>
+
+                <p>
+                    <span class="text-slate-500">Phone:</span>
+                    {{ request.user.phone_number|default:"Not added" }}
+                </p>
+
+                <p>
+                    <span class="text-slate-500">Joined:</span>
+                    {{ request.user.date_joined|date:"d M Y" }}
+                </p>
+
+                <p>
+                    <span class="text-slate-500">Pending Tasks:</span>
+                    {{ pending_tasks }}
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

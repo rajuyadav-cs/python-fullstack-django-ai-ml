@@ -1,0 +1,109 @@
+{% extends "index.html" %}
+
+{% block title %}
+Team List
+{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto">
+
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-4xl font-bold text-white">
+            Teams
+        </h1>
+
+        {% if request.user.is_superuser or request.user.role == "MANAGER" %}
+
+            <a href="{% url 'team-create' %}"
+            class="px-5 py-2 bg-cyan-600 text-white rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 hover:shadow-lg transition">
+                Create Team
+            </a>
+
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {% for team in teams %}
+
+        <div class="bg-slate-900 text-white p-6 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl transition">
+
+            <h2 class="text-2xl font-bold mb-3">
+                {{ team.team_name }}
+            </h2>
+
+            <p class="mb-3 text-slate-300">
+                {{ team.description|default:"No Description" }}
+            </p>
+
+            <p><strong>Created By:</strong> {{ team.created_by.username }}</p>
+            <p><strong>Members:</strong> {{ team.members.count }}</p>
+            <p><strong>Created At:</strong> {{ team.created_at|date:"d M Y" }}</p>
+
+            <div class="flex gap-3 mt-4">
+
+                <a href="{% url 'team-detail' team.id %}"
+                   class="px-4 py-2 bg-cyan-600 text-white rounded-lg border border-cyan-400 shadow-md hover:bg-cyan-700 hover:shadow-lg transition">
+                    View
+                </a>
+
+                {% if request.user.is_superuser or request.user.role == "MANAGER" %}
+
+                <a href="{% url 'team-update' team.id %}"
+                class="px-4 py-2 bg-yellow-500 text-white rounded-lg border border-yellow-300 shadow-md hover:bg-yellow-600 hover:shadow-lg transition">
+                    Edit
+                </a>
+
+                <a href="{% url 'team-delete' team.id %}"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg border border-red-400 shadow-md hover:bg-red-700 hover:shadow-lg transition">
+                    Delete
+                </a>
+
+                {% endif %}
+
+
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="text-white bg-slate-900 p-6 rounded-xl">
+            No Teams Found
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% if is_paginated %}
+
+    <div class="flex justify-center items-center gap-4 mt-8 text-white">
+
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="px-4 py-2 bg-slate-800 rounded-lg border border-slate-600 hover:bg-slate-700 transition">
+                Previous
+            </a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-slate-900 rounded-lg border border-slate-700">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="px-4 py-2 bg-slate-800 rounded-lg border border-slate-600 hover:bg-slate-700 transition">
+                Next
+            </a>
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock content %}
