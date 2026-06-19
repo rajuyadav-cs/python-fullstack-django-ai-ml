@@ -6,98 +6,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     {% tailwind_css %}
 
-    <title>
-        {% block title %}
-            Homepage
-        {% endblock %}
-    </title>
+    <title>{% block title %}Homepage{% endblock %}</title>
 </head>
 
 <body class="bg-cyan-500 min-h-screen">
 
-    <div class="w-full min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col">
 
-        <!-- Navbar -->
-        <nav class="w-full shadow-lg bg-slate-900 text-slate-200 px-4 md:px-6 py-3">
+    <!-- Navbar -->
+    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+            <div class="flex justify-between items-center h-20">
 
                 <!-- Logo -->
-                <div class="flex justify-center lg:justify-start">
-                    <a href="{% url 'home' %}">
-                        <img
-                            class="h-9 md:h-11 w-auto object-contain"
-                            src="{% static 'accounts/images/logo.png' %}"
-                            alt="Logo"
-                        >
-                    </a>
-                </div>
+                <a href="{% url 'home' %}" class="flex items-center gap-3">
+                    <img
+                        class="h-14 w-14 object-cover rounded-2xl"
+                        src="{% static 'accounts/images/logo.png' %}"
+                        alt="Logo"
+                    >
+                    <span class="hidden sm:block text-xl font-bold text-cyan-400">
+                        ProjectFlow
+                    </span>
+                </a>
 
-                <!-- Links -->
-                <div class="flex flex-wrap justify-center lg:justify-end items-center gap-2 text-sm md:text-base">
+                <!-- Desktop Links -->
+                <div class="hidden md:flex items-center gap-2">
 
-                    <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                       href="{% url 'home' %}">
-                        Home
-                    </a>
-
-                    <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                       href="{% url 'team-list' %}">
-                        Teams
-                    </a>
-
-                    <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                       href="{% url 'project-list' %}">
-                        Projects
-                    </a>
-
-                    <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                       href="{% url 'task-list' %}">
-                        Tasks
-                    </a>
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'team-list' %}">Teams</a>
+                    <a class="nav-link" href="{% url 'project-list' %}">Projects</a>
+                    <a class="nav-link" href="{% url 'task-list' %}">Tasks</a>
 
                     {% if request.user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
 
-                        <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                           href="{% url 'dashboard' %}">
-                            Dashboard
-                        </a>
-
-                        <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                           href="{% url 'profile' %}">
-                            Profile
-                        </a>
-
-                        <form action="{% url 'logout' %}" method="post" class="inline">
+                        <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}
-                            <button
-                                type="submit"
-                                class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition">
+                            <button type="submit" class="nav-link">
                                 Logout
                             </button>
                         </form>
-
                     {% else %}
-
-                        <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                           href="{% url 'login' %}">
-                            Login
-                        </a>
-
-                        <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                           href="{% url 'register' %}">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link bg-cyan-500 text-slate-900 hover:bg-cyan-300" href="{% url 'register' %}">
                             Register
                         </a>
-
                     {% endif %}
 
                     {% if request.user.is_superuser %}
-                        <a class="text-white px-3 py-2 rounded-lg hover:text-cyan-500 hover:bg-cyan-200 transition"
-                           href="{% url 'admin:index' %}">
-                            Admin
+                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
+
+                </div>
+
+                <!-- Mobile Button -->
+                <button
+                    id="menuBtn"
+                    class="md:hidden text-white text-3xl focus:outline-none"
+                    type="button">
+                    ☰
+                </button>
+
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden pb-5 space-y-2">
+
+                <a class="mobile-link" href="{% url 'home' %}">Home</a>
+                <a class="mobile-link" href="{% url 'team-list' %}">Teams</a>
+                <a class="mobile-link" href="{% url 'project-list' %}">Projects</a>
+                <a class="mobile-link" href="{% url 'task-list' %}">Tasks</a>
+
+                {% if request.user.is_authenticated %}
+                    <a class="mobile-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="mobile-link" href="{% url 'profile' %}">Profile</a>
+
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="mobile-link text-left w-full">
+                            Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="mobile-link" href="{% url 'login' %}">Login</a>
+                    <a class="mobile-link bg-cyan-500 text-slate-900 font-semibold" href="{% url 'register' %}">
+                        Register
+                    </a>
+                {% endif %}
+
+                {% if request.user.is_superuser %}
+                    <a class="mobile-link" href="{% url 'admin:index' %}">Admin</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 w-full">
+        {% block content %}
+
+        <!-- Hero Section -->
+        <section class="min-h-[calc(100vh-5rem)] flex items-center px-4 sm:px-6 lg:px-8 py-12">
+
+            <div class="max-w-5xl mx-auto text-center text-white">
+
+                <p class="text-cyan-100 text-base sm:text-lg mb-4 font-medium">
+                    Team Collaboration & Project Management
+                </p>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                    Manage Teams,
+                    <span class="text-slate-900">Projects</span>
+                    &
+                    <span class="text-slate-900">Tasks</span>
+                    Efficiently
+                </h1>
+
+                <p class="text-lg sm:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+                    Organize projects, assign tasks, collaborate with teams,
+                    track progress and deliver work faster from one place.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}"
+                           class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
+                            Go To Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{% url 'register' %}"
+                           class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
+                            Get Started
+                        </a>
+
+                        <a href="{% url 'login' %}"
+                           class="border border-white hover:bg-white hover:text-slate-900 px-8 py-3 rounded-xl font-semibold transition">
+                            Login
                         </a>
                     {% endif %}
 
@@ -105,138 +157,101 @@
 
             </div>
 
-        </nav>
+        </section>
 
-        <!-- Main Content -->
-        <main class="flex-1 px-4 py-6 md:p-6">
+        {% endblock content %}
+    </main>
 
-            {% block content %}
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <section class="min-h-[70vh] flex items-center justify-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
 
-                <div class="text-center text-white max-w-4xl mx-auto">
-
-                    <p class="text-cyan-100 text-base md:text-lg mb-4 font-medium">
-                        Team Collaboration & Project Management
+                <div>
+                    <h2 class="text-2xl font-bold text-cyan-400">
+                        ProjectFlow
+                    </h2>
+                    <p class="mt-3 text-slate-300">
+                        A modern team collaboration and project management
+                        platform built with Django & Tailwind CSS.
                     </p>
-
-                    <h1 class="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-                        Manage Teams,
-                        <span class="text-slate-900">Projects</span>
-                        &
-                        <span class="text-slate-900">Tasks</span>
-                        Efficiently
-                    </h1>
-
-                    <p class="text-base md:text-xl text-white mb-8 max-w-3xl mx-auto">
-                        Organize projects, assign tasks, collaborate with teams,
-                        track progress and deliver work faster from one place.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-
-                        {% if request.user.is_authenticated %}
-
-                            <a href="{% url 'dashboard' %}"
-                               class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
-                                Go To Dashboard
-                            </a>
-
-                        {% else %}
-
-                            <a href="{% url 'register' %}"
-                               class="bg-slate-900 hover:bg-slate-800 px-8 py-3 rounded-xl font-semibold transition">
-                                Get Started
-                            </a>
-
-                            <a href="{% url 'login' %}"
-                               class="border border-white hover:bg-white hover:text-slate-900 px-8 py-3 rounded-xl font-semibold transition">
-                                Login
-                            </a>
-
-                        {% endif %}
-
-                    </div>
-
                 </div>
 
-            </section>
-
-            {% endblock content %}
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-slate-900 text-white">
-
-            <div class="max-w-7xl mx-auto px-6 md:px-8 py-10">
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-
-                    <div>
-                        <h2 class="text-2xl font-bold text-cyan-400">
-                            ProjectFlow
-                        </h2>
-
-                        <p class="mt-3 text-slate-300">
-                            A modern team collaboration and project management
-                            platform built with Django & Tailwind CSS.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">
-                            Quick Links
-                        </h3>
-
-                        <ul class="space-y-2 text-slate-300">
-                            <li>
-                                <a href="{% url 'home' %}" class="hover:text-cyan-400">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="{% url 'dashboard' %}" class="hover:text-cyan-400">
-                                    Dashboard
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="{% url 'profile' %}" class="hover:text-cyan-400">
-                                    Profile
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">
-                            Contact
-                        </h3>
-
-                        <p class="text-slate-300 break-words">
-                            rajuyadav242625@gmail.com
-                        </p>
-
-                        <p class="text-slate-300 mt-2">
-                            Built with ❤️ using Django & Tailwind
-                        </p>
-                    </div>
-
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">
+                        Quick Links
+                    </h3>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><a href="{% url 'home' %}" class="hover:text-cyan-400">Home</a></li>
+                        <li><a href="{% url 'dashboard' %}" class="hover:text-cyan-400">Dashboard</a></li>
+                        <li><a href="{% url 'profile' %}" class="hover:text-cyan-400">Profile</a></li>
+                    </ul>
                 </div>
 
-                <hr class="my-6 border-slate-700">
-
-                <div class="text-center text-slate-400 text-sm">
-                    © 2026 ProjectFlow. All Rights Reserved.
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">
+                        Contact
+                    </h3>
+                    <p class="text-slate-300 break-words">
+                        rajuyadav242625@gmail.com
+                    </p>
+                    <p class="text-slate-300 mt-2">
+                        Built with ❤️ using Django & Tailwind
+                    </p>
                 </div>
 
             </div>
 
-        </footer>
+            <hr class="my-6 border-slate-700">
 
-    </div>
+            <div class="text-center text-slate-400 text-sm">
+                © 2026 ProjectFlow. All Rights Reserved.
+            </div>
+
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    menuBtn.addEventListener("click", function () {
+        mobileMenu.classList.toggle("hidden");
+    });
+</script>
+
+<style>
+    .nav-link {
+        display: inline-block;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        color: white;
+        transition: all 0.2s ease-in-out;
+        font-weight: 500;
+    }
+
+    .nav-link:hover {
+        color: #0891b2;
+        background-color: #cffafe;
+        transform: scale(1.05);
+    }
+
+    .mobile-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        color: white;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .mobile-link:hover {
+        background-color: #cffafe;
+        color: #0891b2;
+    }
+</style>
 
 </body>
 </html>
